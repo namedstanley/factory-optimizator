@@ -1,0 +1,18 @@
+Sviluppare un codice python che dovrà:
+    - presentare una funzione per generare casualmente le quantità da produrre per ogni
+      tipo di prodotto (considerare almeno 3 prodotti differenti)
+    - presentare una funzione per generare casualmente i paramentri da configurare, come il tempo di produzione
+      giornaliera per tipologia di prodotto e complessiva
+    - restituire come output il tempo di produzione complessivo dell'intero lotto di produzione
+
+Il processo produttivo si compone di 6 punti:
+    1. Progettazione e sviluppo: uso di CAD (Computer-Aided Design) e CAE (Computer-Aided Engineering);
+      simulazioni virtuali per aerodinamica, sicurezza e consumi.
+    2. Produzione dei componenti: stampaggio e fusione dei metalli; lavorazioni meccaniche con torni CNC
+      e robot antropomorfi; stampaggio a iniezione per plastica e compositi.
+    3. Assemblaggio della carrozzeria: linee di saldatura robotizzate (robot KUKA, ABB, Comau);
+      saldatura a punti, laser welding, adesivi industriali.
+    4. Verniciatura: tunnel automatizzati, cabine di spruzzatura e trattamenti anticorrosione (cataforesi).
+    5. Assemblaggio finale: montaggio motore, trasmissione, sospensioni e sistemi elettronici;
+      linee just-in-time con AGV e visione artificiale.
+    6. Collaudo e test: verifiche meccaniche, elettroniche e di software, inclusi sistemi di guida autonoma.
