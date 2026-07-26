@@ -1,5 +1,5 @@
-from model.processhandler import ProcessHandler
-from model.productionplanner import ProductionPlanner
+from controller.processhandler import ProcessHandler
+from controller.productionplanner import ProductionPlanner
 
 from model.cars.convertible import *
 from model.cars.coupe import *
