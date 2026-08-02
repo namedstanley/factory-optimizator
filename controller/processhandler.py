@@ -22,7 +22,6 @@ class ProcessHandler:
     def __init__(self):
         self.__designer = self.Designer()
         self.__assembler = self.Assembler()
-        self.__vehicles = []
 
     def createVehicle(self, vehicle: Vehicle):
 
@@ -56,8 +55,6 @@ class ProcessHandler:
             premiumComponents if vehicle.isPremium else {},
             tuningComponents if vehicle.isTuned else {}
         )
-
-        self.__vehicles.append(vehicle)
 
         return vehicle
 
