@@ -5,7 +5,6 @@ from model.cars.hatchback import *
 from model.cars.sedan import *
 from model.cars.suv import *
 from model.cars.van import *
-from data.multipliers import *
 from data.components import *
 import random
 import string
@@ -25,31 +24,9 @@ class ProcessHandler:
 
     def createVehicle(self, vehicle: Vehicle):
 
-        match vehicle:
-            case SUV():
-                multiplier = SUV_PRICE_MULTIPLIERS
+        standardComponents, premiumComponents, tuningComponents = self.__designer.designVehicleComponents(vehicle)
 
-            case Sedan():
-                multiplier = SEDAN_PRICE_MULTIPLIERS
-
-            case Hatchback():
-                multiplier = HATCHBACK_PRICE_MULTIPLIERS
-
-            case Convertible():
-                multiplier = CONVERTIBLE_PRICE_MULTIPLIERS
-
-            case Van():
-                multiplier = VAN_PRICE_MULTIPLIERS
-
-            case Coupe():
-                multiplier = COUPE_PRICE_MULTIPLIERS
-
-            case _:
-                raise Exception("Vehicle not supported")
-
-        standardComponents, premiumComponents, tuningComponents = self.__designer.designVehicleComponents(multiplier)
-
-        vehicle = self.__assembler.assemble_vehicle(
+        vehicle = self.__assembler.assembleVehicle(
             vehicle,
             standardComponents,
             premiumComponents if vehicle.isPremium else {},
@@ -74,7 +51,7 @@ class ProcessHandler:
         def __initTuningComponents(self):
             self.__tuningComponents = retrieveTuningComponents()
 
-        def designVehicleComponents(self, multiplier: dict) -> dict:
+        def designVehicleComponents(self, vehicle: Vehicle) -> dict:
             self.__initStandardComponents()
             self.__initPremiumComponents()
             self.__initTuningComponents()
@@ -82,15 +59,15 @@ class ProcessHandler:
             standardComponents = {}
             for k, v in self.__standardComponents.items():
                 standardComponents[k] = v
-                standardComponents[k].price = float(v.price * multiplier.get(k, 1.0))
+                standardComponents[k].price = float(v.price * vehicle.priceMultipliers.get(k, 1.0))
             premiumComponents = {}
             for k, v in self.__premiumComponents.items():
                 premiumComponents[k] = v
-                premiumComponents[k].price = float(v.price * multiplier.get(k, 1.0))
+                premiumComponents[k].price = float(v.price * vehicle.priceMultipliers.get(k, 1.0))
             tuningComponents = {}
             for k, v in self.__tuningComponents.items():
                 tuningComponents[k] = v
-                tuningComponents[k].price = float(v.price * multiplier.get(k, 1.0))
+                tuningComponents[k].price = float(v.price * vehicle.priceMultipliers.get(k, 1.0))
             
             return ( standardComponents, premiumComponents, tuningComponents )
 
@@ -99,7 +76,7 @@ class ProcessHandler:
         def __init__(self):
             pass
 
-        def assemble_vehicle(self, vehicle: Vehicle, standardComponents: dict, premiumComponents: dict, tuningComponents: dict) -> Vehicle:
+        def assembleVehicle(self, vehicle: Vehicle, standardComponents: dict, premiumComponents: dict, tuningComponents: dict) -> Vehicle:
             
             vehicle.standardComponents = standardComponents
             vehicle.premiumComponents = premiumComponents
@@ -114,47 +91,18 @@ class ProcessHandler:
             standardComponentsTime = premiumComponentsTime = tuningComponentsTime = 0.0
             
             for component in vehicle.standardComponents.values():
-                #print("Assembling standard component " + component.name + " is going to take " + str(component.assembly_time) + " hours")
-                #print(component.name + " assembled")
                 standardComponentsPrice += component.price
                 standardComponentsTime += component.assembly_time
-            #print("Assembling standard components took " + str(standardComponentsTime) + " days and " + str(standardComponentsPrice) + "$ for " + vehicle.vin)
 
             for component in vehicle.premiumComponents.values():
-                #print("Assembling premium component " + component.name + " is going to take " + str(component.assembly_time) + " hours")
-                #print(component.name + " assembled")
                 premiumComponentsPrice += component.price
                 premiumComponentsTime += component.assembly_time
-            #print("Assembling premium components took " + str(premiumComponentsTime) + " days and " + str(premiumComponentsPrice) + "$ for " + vehicle.vin)
 
             for component in vehicle.tuningComponents.values():
-                #print("Assembling tuning component " + component.name + " is going to take " + str(component.assembly_time) + " hours")
-                #print(component.name + " assembled")
                 tuningComponentsPrice += component.price
                 tuningComponentsTime += component.assembly_time
-            #print("Assembling tuning components took " + str(tuningComponentsTime) + " days and " + str(tuningComponentsPrice) + "$ for " + vehicle.vin)
             
             vehicle.productionPrice = round(standardComponentsPrice + premiumComponentsPrice + tuningComponentsPrice, 2)
             vehicle.productionTime = round(standardComponentsTime + premiumComponentsTime + tuningComponentsTime, 2)
 
-            #print("Total production time: " + str(vehicle.productionTime))
-            #print("Total price: " + str(vehicle.productionPrice) + "$")
             return vehicle
-
-    class ProductionPlanner:
-
-        def __init__(self):
-            self.__productionLot = {}
-
-        def generateProductionLot(self):
-
-            self.__productionLot = {
-                SUV: random.randint(2, 10),
-                Coupe: random.randint(2, 10),
-                Sedan: random.randint(2, 10),
-                Hatchback: random.randint(2, 10),
-                Van: random.randint(2, 10),
-                Convertible: random.randint(2, 10)
-            }
-
-            return self.__productionLot

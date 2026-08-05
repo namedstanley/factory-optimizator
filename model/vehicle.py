@@ -1,4 +1,5 @@
 from model.component import Component
+from typing import Final
 
 class Vehicle:
 
@@ -17,3 +18,5 @@ class Vehicle:
 
         self.isPremium = False
         self.isTuned = False
+
+        self.priceMultipliers : Final[dict] = {}
