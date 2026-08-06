@@ -11,58 +11,62 @@ from data.vehicletypes import getVechicleTypes
 
 class ProductionPlanner:
 
-    def __init__(self):    
+    def __init__(self):
+        self.__lot = []
         self.__lotSummary = {}
+        self.__minNumOfVehicles = 3
 
     def generateProductionLot(self):
 
-        lot = []
-
         vehicleTypes = getVechicleTypes()
-        count = random.randint(3,len(vehicleTypes))
-
+        count = random.randint(
+            self.__minNumOfVehicles
+                if (len(vehicleTypes) >= self.__minNumOfVehicles)
+                else len(vehicleTypes),
+            len(vehicleTypes)
+        )
+        
         pickedVehicleTypes = random.sample(vehicleTypes, count)
         
         for vehicleType in pickedVehicleTypes:
-
             quantity = random.randint(2, 8)
-
             for _ in range(quantity):
-
                 vehicle = vehicleType()
                 configuration = random.randint(1, 4)
                 match configuration:
-
                     case 1:
                         # Standard
                         pass
-
                     case 2:
                         vehicle.isPremium = True
-
                     case 3:
                         vehicle.isTuned = True
-
                     case 4:
                         vehicle.isPremium = True
                         vehicle.isTuned = True
-                lot.append(vehicle)
+                self.__lot.append(vehicle)
 
         self.__lotSummary = {
-            "SUV Cars": list(filter(lambda vehicle: isinstance(vehicle,SUV), lot)),
-            "Coupe Cars": list(filter(lambda vehicle: isinstance(vehicle,Coupe), lot)),
-            "Sedan Cars": list(filter(lambda vehicle: isinstance(vehicle,Sedan), lot)),
-            "Hatchback Cars": list(filter(lambda vehicle: isinstance(vehicle,Hatchback), lot)),
-            "Van Cars": list(filter(lambda vehicle: isinstance(vehicle,Van), lot)),
-            "Convertible Cars": list(filter(lambda vehicle: isinstance(vehicle,Convertible), lot))
+            "SUV Cars": list(filter(lambda vehicle: isinstance(vehicle,SUV), self.__lot)),
+            "Coupe Cars": list(filter(lambda vehicle: isinstance(vehicle,Coupe), self.__lot)),
+            "Sedan Cars": list(filter(lambda vehicle: isinstance(vehicle,Sedan), self.__lot)),
+            "Hatchback Cars": list(filter(lambda vehicle: isinstance(vehicle,Hatchback), self.__lot)),
+            "Van Cars": list(filter(lambda vehicle: isinstance(vehicle,Van), self.__lot)),
+            "Convertible Cars": list(filter(lambda vehicle: isinstance(vehicle,Convertible), self.__lot))
         }
 
-        return lot
+        return self.__lot.copy(), self.__lotSummary.copy()
 
     def getlotSummary(self):
         return self.__lotSummary.copy()
 
-    def printLot(self,lot: list[Vehicle]):
+    def getlot(self):
+        return self.__lot.copy()
+
+    def setMinNumOfVehicles(self, num: int):
+        self.__minNumOfVehicles = num
+
+    def printLot(self):
 
         if(self.__lotSummary == None):
             print("Create lot first")

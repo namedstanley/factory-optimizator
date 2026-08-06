@@ -12,9 +12,7 @@ import PySimpleGUI as sg
 
 def generateLot():
     pp = ProductionPlanner()
-    lot = pp.generateProductionLot()
-    lotSummary = pp.getlotSummary()
-    return lot, lotSummary
+    return pp.generateProductionLot()
 
 def createVehicles(lot):
     ph = ProcessHandler()
@@ -32,7 +30,7 @@ LOT_SUMMARY = None
 gplGenerateButton = sg.Button("Generate", key="-GENPRODLOTBUTTON-")
 
 generateProductionLotLayout = [
-    [sg.Text("Generate Production Lot")],
+    [sg.Text("Lot summary")],
     [sg.Table(headings=["Car type", "Amount", "Premium", "Tuned"], values=[], key="-LOTSUM-", expand_x=True)],
     [sg.Col(expand_y=True, layout=[[]])],
     [gplGenerateButton]
@@ -44,7 +42,7 @@ gplTab = sg.Tab("Generate Production Lot",generateProductionLotLayout)
 #Create Vehicles graphics
 cvCreateButton = sg.Button("Generate", key="-CREATEVEHICLESBUTTON-")
 createVehiclesLayout = [
-    [sg.Text("Create Vehicles")],
+    [sg.Text("Vehicle list")],
     [sg.Table(headings=["VIN", "Price", "HP", "Capacity", "Production Time", "Premium", "Tuned"], values=[], key="-CREATEVEHICLESTABLE-", expand_x=True, expand_y=True)],
     [sg.Text("Total price: 0$\nTotal time: 0 hours", key="-TOTALPRICETIMETEXT-")],
     [sg.Col(expand_y=True, layout=[[]])],
@@ -72,7 +70,6 @@ while True:
             lotSummaryTableValues.append([ vehicleType,len(vehicles),
                                           len(list(filter(lambda vehicle: vehicle.isPremium, vehicles))), len(list(filter(lambda vehicle: vehicle.isTuned, vehicles))) ])
         window["-LOTSUM-"].update(values=lotSummaryTableValues)
-        vehicles = createVehicles(LOT)
     if event == "-CREATEVEHICLESBUTTON-":
         vehicles = createVehicles(LOT)
         createVehiclesTableValues = []
