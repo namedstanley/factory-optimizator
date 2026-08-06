@@ -7,29 +7,21 @@ from model.cars.hatchback import Hatchback
 from model.cars.van import Van
 from model.cars.convertible import Convertible
 from model.vehicle import Vehicle
-from typing import Final
+from data.vehicletypes import getVechicleTypes
 
 class ProductionPlanner:
 
     def __init__(self):    
-        self.__vehicleTypes : Final[list] = [
-            SUV,
-            Coupe,
-            Sedan,
-            Hatchback,
-            Van,
-            Convertible
-        ]
         self.__lotSummary = {}
 
     def generateProductionLot(self):
 
         lot = []
 
-        vehicleTypes = self.__vehicleTypes.copy()
+        vehicleTypes = getVechicleTypes()
         count = random.randint(3,len(vehicleTypes))
 
-        pickedVehicleTypes = random.sample(self.__vehicleTypes, count)
+        pickedVehicleTypes = random.sample(vehicleTypes, count)
         
         for vehicleType in pickedVehicleTypes:
 
