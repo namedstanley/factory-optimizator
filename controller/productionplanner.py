@@ -20,7 +20,7 @@ class ProductionPlanner:
             Van,
             Convertible
         ]
-        lotSummary = {}
+        self.__lotSummary = {}
 
     def generateProductionLot(self):
 
