@@ -46,15 +46,11 @@ class ProductionPlanner:
                         vehicle.isTuned = True
                 self.__lot.append(vehicle)
 
-        self.__lotSummary = {
-            "SUV Cars": list(filter(lambda vehicle: isinstance(vehicle,SUV), self.__lot)),
-            "Coupe Cars": list(filter(lambda vehicle: isinstance(vehicle,Coupe), self.__lot)),
-            "Sedan Cars": list(filter(lambda vehicle: isinstance(vehicle,Sedan), self.__lot)),
-            "Hatchback Cars": list(filter(lambda vehicle: isinstance(vehicle,Hatchback), self.__lot)),
-            "Van Cars": list(filter(lambda vehicle: isinstance(vehicle,Van), self.__lot)),
-            "Convertible Cars": list(filter(lambda vehicle: isinstance(vehicle,Convertible), self.__lot))
-        }
+        self.__lotSummary = {}
 
+        for vt in vehicleTypes:
+            self.__lotSummary[vt.__name__] =  list(filter(lambda vehicle: isinstance(vehicle,vt), self.__lot))
+            
         return self.__lot.copy(), self.__lotSummary.copy()
 
     def getlotSummary(self):
